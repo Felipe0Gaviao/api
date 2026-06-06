@@ -101,4 +101,19 @@ public class SistemasService {
         // Salva no banco de dados
         return usuarioRepository.save(novoUsuario);
     }
+
+    public void excluirProduto(Long id) {
+        // 1. Verifica se o produto realmente existe
+        if (!produtoRepository.existsById(id)) {
+            throw new IllegalArgumentException("Produto não encontrado.");
+        }
+
+        // 2. Regra de Negócio/SAEP: Impede a exclusão se houver histórico de movimentação
+        if (movimentacaoRepository.existsByProdutoId(id)) {
+            throw new IllegalArgumentException("Não é possível excluir um produto que possui movimentações no histórico.");
+        }
+
+        // 3. Se passou pelas validações, exclui do banco
+        produtoRepository.deleteById(id);
+    }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api")
 public class DashboardController {
 
@@ -48,9 +49,20 @@ public class DashboardController {
         return ResponseEntity.ok(service.listarProdutos());
     }
 
+    // 1. ENDPOINT DE ADIÇÃO (CADASTRO) DE PRODUTO
     @PostMapping("/produtos")
     public ResponseEntity<ProdutoModel> cadastrarProduto(@Valid @RequestBody ProdutoRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.cadastrarProduto(dto));
+        ProdutoModel novoProduto = service.cadastrarProduto(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoProduto);
+    }
+
+    // 2. ENDPOINT DE EXCLUSÃO DE PRODUTO
+    @DeleteMapping("/produtos/{id}")
+    public ResponseEntity<Map<String, Object>> excluirProduto(@PathVariable Long id) {
+        service.excluirProduto(id);
+        return ResponseEntity.ok(Map.of(
+                "mensagem", "Produto excluído com sucesso."
+        ));
     }
 
     // Endpoints de Movimentações
