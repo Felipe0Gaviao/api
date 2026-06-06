@@ -9,11 +9,11 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalException {
+
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String,Object>> illegalArgumentException(IllegalArgumentException error) {
+    public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException error) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(Map.of("mensagem", error.getMessage()));
     }
-
 }
