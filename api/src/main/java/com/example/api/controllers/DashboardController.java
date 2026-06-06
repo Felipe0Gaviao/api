@@ -56,6 +56,13 @@ public class DashboardController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novoProduto);
     }
 
+    // ENDPOINT DE EDIÇÃO (ATUALIZAÇÃO) DE PRODUTO
+    @PutMapping("/produtos/{id}")
+    public ResponseEntity<ProdutoModel> editarProduto(@PathVariable Long id, @Valid @RequestBody ProdutoRequestDTO dto) {
+        ProdutoModel produtoAtualizado = service.editarProduto(id, dto);
+        return ResponseEntity.ok(produtoAtualizado);
+    }
+
     // 2. ENDPOINT DE EXCLUSÃO DE PRODUTO
     @DeleteMapping("/produtos/{id}")
     public ResponseEntity<Map<String, Object>> excluirProduto(@PathVariable Long id) {

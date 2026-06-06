@@ -50,6 +50,26 @@ public class SistemasService {
         return produtoRepository.save(produto);
     }
 
+    // Adicione este método dentro do seu SistemasService:
+    public ProdutoModel editarProduto(Long id, ProdutoRequestDTO dto) {
+        // 1. Verifica se o produto existe no banco
+        ProdutoModel produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado."));
+
+        // 2. Valida se o novo nome já pertence a OUTRO produto (evita duplicidade)
+        if (!produto.getNome().equalsIgnoreCase(dto.getNome()) && produtoRepository.existsByNome(dto.getNome())) {
+            throw new IllegalArgumentException("Já existe outro produto cadastrado com este nome.");
+        }
+
+        // 3. Atualiza os campos do produto com os novos dados do DTO
+        produto.setNome(dto.getNome());
+        produto.setDescricao(dto.getDescricao());
+        produto.setEstoqueMinimo(dto.getEstoqueMinimo());
+
+        // 4. Salva as alterações
+        return produtoRepository.save(produto);
+    }
+
     // Item 7: Registrar Movimentação e Atualizar Estoque
     @Transactional
     public MovimentacaoModel registrarMovimentacao(MovimentacaoRequestDTO dto) {
