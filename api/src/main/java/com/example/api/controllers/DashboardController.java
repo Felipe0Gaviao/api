@@ -30,14 +30,16 @@ public class DashboardController {
         ));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginRequestDTO dto) {
-        UsuarioModel usuario = service.realizarLogin(dto);
-        return ResponseEntity.ok(Map.of(
-                "mensagem", "Login bem-sucedido",
-                "usuarioId", usuario.getId(),
-                "nome", usuario.getNome()
-        ));
+    @PostMapping("/usuarios")
+    public ResponseEntity<Map<String, Object>> cadastrarUsuario(@Valid @RequestBody UsuarioRequestDTO dto) {
+        UsuarioModel usuarioSalvo = service.cadastrarUsuario(dto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "mensagem", "Usuário cadastrado com sucesso.",
+                        "id", usuarioSalvo.getId(),
+                        "login", usuarioSalvo.getLogin()
+                ));
     }
 
     // Endpoints de Produtos

@@ -85,4 +85,20 @@ public class SistemasService {
     public List<MovimentacaoModel> listarMovimentacoes() {
         return movimentacaoRepository.findAll();
     }
+
+    public UsuarioModel cadastrarUsuario(UsuarioRequestDTO dto) {
+        // Verifica se já existe um usuário com o mesmo login
+        if (usuarioRepository.findByLogin(dto.getLogin()).isPresent()) {
+            throw new IllegalArgumentException("Este login já está em uso por outro usuário.");
+        }
+
+        // Cria e popula a entidade
+        UsuarioModel novoUsuario = new UsuarioModel();
+        novoUsuario.setNome(dto.getNome());
+        novoUsuario.setLogin(dto.getLogin());
+        novoUsuario.setSenha(dto.getSenha()); // Em ambiente SAEP a senha costuma ser gravada em texto limpo
+
+        // Salva no banco de dados
+        return usuarioRepository.save(novoUsuario);
+    }
 }
